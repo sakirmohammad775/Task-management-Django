@@ -1,3 +1,4 @@
+{% load static %}  <!--load -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,15 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <h3>hello bangladesh</h3>
+
+    {{name}} <!-- this is a variable -->
+    {{age}}
+    {{city}}
+
+    {% for name in names %}
+        <p>{{name}}</p>
+    {% endfor %}
+
+    
 </body>
 </html>

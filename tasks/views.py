@@ -13,4 +13,10 @@ def user_dashboard(request):
     return render(request, 'dashboard/user_dashboard.html')
 
 def test(request):
-    return render(request,'test.html')
+    context={
+        'names':['John',"ahmed","john"],
+        'age':[25,30,35],
+        'city':['cairo','alex','giza']
+        
+    }
+    return render(request,'test.html',context)
