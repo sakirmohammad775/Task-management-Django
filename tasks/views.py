@@ -4,10 +4,13 @@ from django.http import HttpResponse
 
 # Create your views here.
 def home(request):
-   return HttpResponse('hello i am back')
+   return HttpResponse('contact me')
 
-def contact(request):
-    return HttpResponse('contact me')
+def manager_dashboard(request):
+    return render(request, 'dashboard/manager_dashboard.html')
 
-def show_task(request):
-    return HttpResponse('This is our task page')
+def user_dashboard(request):
+    return render(request, 'dashboard/user_dashboard.html')
+
+def test(request):
+    return render(request,'test.html')
