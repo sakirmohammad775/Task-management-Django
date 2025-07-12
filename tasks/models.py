@@ -13,7 +13,7 @@ class Employee(models.Model):
 class Task(models.Model):
     project = models.ForeignKey("Project", on_delete=models.CASCADE, default=1) # One to many relationship (child=task... parent=project)
 
-    assigned_to = models.ManyToManyField(Employee, related_name="tasks") # many to many field
+    assigned_to = models.ManyToManyField(Employee, related_name="tasks") # many to many field (one employee can have many tasks) and one task can be assigned to many employees
 
     # new_string=models.CharField(max_length=250)
     title = models.CharField(max_length=250)
