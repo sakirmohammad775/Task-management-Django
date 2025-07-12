@@ -1,12 +1,14 @@
-{% load static %}  <!--load -->
+{% load static %} <!--load -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+
 <body>
 
     {{name}} <!-- this is a variable -->
@@ -14,9 +16,22 @@
     {{city}}
 
     {% for name in names %}
-        <p>{{name}}</p>
+    
+    {% if name == 'John' %}
+      <p style="color:blue;">{{name}}</p>
+        
+    {% endif %}
+        
+    <p>{{name}}</p>
     {% endfor %}
 
-    
+
+    {% for ages in age %}
+    <p>{{ages}}</p>
+    {% endfor %}
+
+
+
 </body>
+
 </html>
