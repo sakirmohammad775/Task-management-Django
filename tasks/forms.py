@@ -10,8 +10,7 @@ class TaskForm(forms.Form):
     assigned_to = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,choices=[],label="Assigned To")
 
-    def __init__(self, *args, **kwargs):
-        print(args, kwargs)
+    def __init__(self, *args, **kwargs): #fetching choices from database 
         employees = kwargs.pop("employees", [])  ## passing employees list from view
         super().__init__(*args, **kwargs)  # Call to the parent class's constructor
         self.fields["assigned_to"].choices = [(emp.id, emp.name) for emp in employees]

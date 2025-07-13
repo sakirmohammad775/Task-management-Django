@@ -20,7 +20,7 @@ def test(request):
     return render(request,'test.html',context)
 
 def create_task(request):
-    employees=Employee.objects.all()
+    employees=Employee.objects.all() # get all employees from database
     form =TaskModelForm() #For Get
     
     if request.method=="POST": #For Post
