@@ -20,23 +20,27 @@ def test(request):
     return render(request,'test.html',context)
 
 def create_task(request):
-    employees=Employee.objects.all() # get all employees from database
+    employees=Employee.objects.all() # get all employees from database 
     form =TaskModelForm() #For Get
     
     if request.method=="POST": #For Post
-        form = TaskForm(employees=employees, data=request.POST)
+        form = TaskForm(data=request.POST)
         if form.is_valid():
-            data=form.cleaned_data
-            title=data.get('title')
-            description=data.get('description')
-            due_date=data.get('due_date')
-            assigned_to=data.get('assigned_to')
+            """For Model form data"""
+            form.save()
             
-            task=Task.objects.create(title= title,description=description,due_date=due_date)
+            """For Django Form data"""
+            # data=form.cleaned_data
+            # title=data.get('title')
+            # description=data.get('description')
+            # due_date=data.get('due_date')
+            # assigned_to=data.get('assigned_to')
             
-            for emp_id in assigned_to:
-                employee=Employee.objects.get(id=emp_id)
-                task.assigned_to.add(employee)
+            # task=Task.objects.create(title= title,description=description,due_date=due_date)
+            
+            # for emp_id in assigned_to:
+            #     employee=Employee.objects.get(id=emp_id)
+            #     task.assigned_to.add(employee)
             return HttpResponse('task created successfully')
         
     context={"form":form} # For Get
