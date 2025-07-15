@@ -46,3 +46,8 @@ def create_task(request):
         
     context={"form":form} # For Get
     return render(request,"task_form.html",context) # return the form to the user
+
+def view_task( request):
+    # retrive all tasks from database
+    tasks=Task.objects.all()
+    return render(request,'show_task.html',{'tasks':tasks})
