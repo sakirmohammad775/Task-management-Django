@@ -20,14 +20,15 @@ def test(request):
     return render(request,'test.html',context)
 
 def create_task(request):
-    employees=Employee.objects.all() # get all employees from database 
+    # employees=Employee.objects.all() # get all employees from database 
     form =TaskModelForm() #For Get
     
     if request.method=="POST": #For Post
-        form = TaskForm(data=request.POST)
+        form = TaskModelForm(request.POST)
         if form.is_valid():
             """For Model form data"""
             form.save()
+            return render(request,'task_form.html',{"form":form,"message":"task added successfully"})
             
             """For Django Form data"""
             # data=form.cleaned_data
