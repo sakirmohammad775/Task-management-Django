@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from tasks.forms import TaskForm, TaskModelForm
-from tasks.models import Employee,Task
+from tasks.models import Employee,Task,TaskDetail,Project
+from datetime import date
+from django.db.models import Q,Count,Max,Min
 
 # Create your views here.
 def manager_dashboard(request):
@@ -48,9 +50,18 @@ def create_task(request):
     return render(request,"task_form.html",context) # return the form to the user
 
 def view_task( request):
-    #Retrieve all tasks from database
-    tasks=Task.objects.all()
+    # tasks=Task.objects.all() # Retrieve all tasks from database
+    # task_3=Task.objects.get(id=1) # Retrieve a specific task from database
+    # tasks=Task.objects.filter(status="PENDING") #Filtering data
+    # tasks=Task.objects.filter(due_date=date.today()) # Show date today tasks
+    """Show the task whose priority is not low"""
+    # tasks=TaskDetail.objects.exclude(priority="L")
+    """Show the task which are pending or in-progress"""
+    # tasks=Task.objects.filter(Q(status="PENDING")|Q(status="IN_PROGRESS"))
     
-    #Retrieve a specific task from database
-    task_3=Task.objects.get(id=1)
-    return render(request,'show_task.html',{'tasks':tasks,"task3":task_3})
+    #select_related(foreignKey,OneToOneField)
+    # tasks=TaskDetail.objects.select_related('task').all() # Retrieve all tasks from database with details optimized way query
+    # tasks=Task.objects.select_related('project').all()
+    # tasks=Project.objects.prefetch_related('task_set').all() # prefetch used for many to many fields to reduce the sql time 
+    projects=Project.objects.annotate(num_task=Count('task')).order_by('num_task')
+    return render(request,'show_task.html',{'projects':projects})
