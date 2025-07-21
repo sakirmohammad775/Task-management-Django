@@ -30,6 +30,7 @@
     <!--stats section-->
     <div class="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4">
       <!--1st-->
+      <a href="{% url 'manager-dashboard' %}">
       <div class="flex bg-white p-5 rounded-xl shadow-xl justify-between">
         <div>
           <h1 class="font-extralight text-gray-500">TOTAL TASK</h1>
@@ -44,7 +45,7 @@
           </svg>
         </div>
       </div>
-
+      </a>
       <!--2nd completed task-->
       <a href="{% url 'manager-dashboard' %}?type=completed">
         <div class="flex bg-white p-5 rounded-xl shadow-xl justify-between">
@@ -63,6 +64,7 @@
         </div>
       </a>
       <!--3rd-->
+      <a href="{% url 'manager-dashboard' %}?type=in-progress">
       <div class="flex bg-white p-5 rounded-xl shadow-xl justify-between">
         <div>
           <h1 class="font-extralight text-gray-500">TASK IN PROGRESS</h1>
@@ -76,8 +78,10 @@
           </svg>
         </div>
       </div>
+      </a>
 
       <!--4th-->
+      <a href="{% url 'manager-dashboard' %}?type=pending">
       <div class="flex bg-white p-5 rounded-xl shadow-xl justify-between">
         <div>
           <h1 class="font-extralight text-gray-500">TODOS</h1>
@@ -92,6 +96,7 @@
           </svg>
         </div>
       </div>
+      </a>
     </div>
 
     {% block tasks %}
