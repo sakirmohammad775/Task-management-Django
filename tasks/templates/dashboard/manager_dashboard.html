@@ -2,132 +2,58 @@
 <!-- Extend the dashboard template -->
 
 {% block title %}Manager Dashboard {% endblock title %}
- {% block tasks %}
+{% block tasks %}
 
 <!--Task Table-->
-<div class="gap-4">
-  <!--All tasks-->
-  <div class="bg-white shadow-sm mt-5 p-5">
-    <div class=""><span class="font-bold text-xl">All Tasks</span></div>
-    <!--task item-->
-    <div class="flex mt-5 justify-between">
-      <!--task title-->
-      <div class="space-y-5">
-        <div class="text-sm font-semibold text-gray-500 pb-2">TASK TITLE</div>
-        <div class="flex items-center gap-2">
-          <div class="h-2 w-2 rounded-full bg-green-500"></div>
-          <div>
-            <span class="font-semibold">Completed Project proposal</span>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="h-2 w-2 rounded-full bg-orange-300"></div>
-          <div>
-            <span class="font-semibold">Completed Project proposal</span>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="h-2 w-2 rounded-full bg-blue-400"></div>
-          <div>
-            <span class="font-semibold">Prepare for client meeting</span>
-          </div>
-        </div>
-      </div>
-      <!--priority-->
-      <div class="font-extralight space-y-5">
-        <div class="text-sm font-semibold text-gray-500 pb-2">PRIORITY</div>
-        <div>
-          <span
-            class="px-3 py-1 rounded-xl bg-blue-300 text-blue-800 font-semibold"
-            >Low class</span
-          >
-        </div>
 
-        <div>
-          <span
-            class="px-3 py-1 rounded-xl bg-gray-200 text-gray-700 font-semibold"
-            >Medium</span
-          >
-        </div>
-        <div>
-          <span
-            class="px-3 py-1 rounded-xl bg-red-200 text-red-700 font-semibold"
-            >High</span
-          >
-        </div>
-      </div>
-      <!--Team-->
-      <div class="space-y-4">
-        <div class="text-sm font-semibold text-gray-500 pb-2">TEAM</div>
-        <div class="flex -space-x-1">
-          <div
-            class="w-7 h-7 bg-blue-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>CA</span>
-          </div>
-          <div
-            class="w-7 h-7 bg-green-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>JS</span>
-          </div>
-          <div
-            class="w-7 h-7 bg-yellow-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>B</span>
-          </div>
-        </div>
+<div class="bg-white p-8 font-sans text-gray-800">
+  <div class="max-w-6xl mx-auto">
+    <table class="w-full table-fixed border-collapse">
+      <thead>
+        <tr class="border-b border-gray-300 text-left text-sm font-semibold text-gray-600">
+          <th class="text-sm font-semibold text-gray-500 pb-2">TASK TITLE</th>
+          <th class="text-sm font-semibold text-gray-500 pb-2">PRIORITY</th>
+          <th class="text-sm font-semibold text-gray-500 pb-2">TEAM</th>
+          <th class="text-sm font-semibold text-gray-500 pb-2">CREATED AT</th>
+        </tr>
+      </thead>
+      <!--Task Item-->
+      {% for task in tasks %}
+      <tbody class="divide-y divide-gray-200">
+        <tr>
+          <td class="px-4 py-3 text-sm flex items-center gap-2">
+            <div class="flex items-center gap-2">
+              <div class="h-2 w-2 rounded-full bg-green-500"></div>
+              <div>
+                <span class="font-semibold">{{task.title}}</span>
+              </div>
+            </div>
+          </td>
+          <td class="px-4 py-3">
+            <div>
+              <span
+                class="px-3 py-1 rounded-xl bg-blue-300 text-blue-800 font-semibold">{{task.details.get_priority_display}}</span>
+            </div>
+          </td>
+          <td class="px-4 py-3">
+            <div class="flex -space-x-2">
+              {% for emp in task.assigned_to.all %}
+              <div class="w-7 h-7 bg-blue-500 justify-center rounded-full flex items-center text-white">
+                <span>{{emp.name|slice:':2'}}</span>
+              </div>
+              {% endfor %}
 
-        <div class="flex -space-x-2">
-          <div
-            class="w-7 h-7 bg-red-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>AJ</span>
-          </div>
-          <div
-            class="w-7 h-7 bg-purple-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>JS</span>
-          </div>
-          <div
-            class="w-7 h-7 bg-yellow-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>B</span>
-          </div>
-        </div>
+            </div>
+          </td>
+          <td class="px-4 py-3 text-sm">{{task.created_at|timesince}}</td>
+        </tr>
 
-        <div class="flex -space-x-2">
-          <div
-            class="w-7 h-7 bg-blue-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>CA</span>
-          </div>
-          <div
-            class="w-7 h-7 bg-green-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>JS</span>
-          </div>
-          <div
-            class="w-7 h-7 bg-red-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>AJ</span>
-          </div>
-          <div
-            class="w-7 h-7 bg-yellow-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>B</span>
-          </div>
-        </div>
-      </div>
-
-      <!--Created At-->
-      <div class="space-y-5">
-        <div class="text-sm font-semibold text-gray-500 pb-2">CREATED AT</div>
-        <div><span>9 months ago</span></div>
-        <div><span>9 months ago</span></div>
-        <div><span>10 months ago</span></div>
-      </div>
-    </div>
+      </tbody>
+      {% endfor %}
+    </table>
   </div>
+
 </div>
+
 
 {% endblock tasks %}
