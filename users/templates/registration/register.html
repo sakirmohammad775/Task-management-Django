@@ -1,18 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    <h3>register</h3>
+    <h2>Welcome to Authentication System</h2>
     <div>
+        
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+              {{error}}
+            {% endfor %}
+        {% endif %}
+            
         <form action="" method="POST">
             {% csrf_token %}
-            {{form.as_p}}
+            {% for field in form %}
+            <p>
+                <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                <!-- field.id_for_label is the id of the field -->
+                {{field}}
+
+                {% if field.errors %}
+            <ul>
+                {% for error in field.errors %}
+                <li>{{error}}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            </p>
+            {% endfor %}
             <button type="submit">SignUp</button>
         </form>
     </div>
 </body>
+
 </html>
