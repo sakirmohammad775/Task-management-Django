@@ -2,132 +2,60 @@
 <!-- Extend the dashboard template -->
 
 {% block title %}Manager Dashboard {% endblock title %}
- {% block tasks %}
+{% block tasks %}
 
-<!--Task Table-->
-<div class="gap-4">
-  <!--All tasks-->
-  <div class="bg-white shadow-sm mt-5 p-5">
-    <div class=""><span class="font-bold text-xl">All Tasks</span></div>
-    <!--task item-->
-    <div class="flex mt-5 justify-between">
-      <!--task title-->
-      <div class="space-y-5">
-        <div class="text-sm font-semibold text-gray-500 pb-2">TASK TITLE</div>
-        <div class="flex items-center gap-2">
-          <div class="h-2 w-2 rounded-full bg-green-500"></div>
-          <div>
-            <span class="font-semibold">Completed Project proposal</span>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="h-2 w-2 rounded-full bg-orange-300"></div>
-          <div>
-            <span class="font-semibold">Completed Project proposal</span>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="h-2 w-2 rounded-full bg-blue-400"></div>
-          <div>
-            <span class="font-semibold">Prepare for client meeting</span>
-          </div>
-        </div>
-      </div>
-      <!--priority-->
-      <div class="font-extralight space-y-5">
-        <div class="text-sm font-semibold text-gray-500 pb-2">PRIORITY</div>
-        <div>
-          <span
-            class="px-3 py-1 rounded-xl bg-blue-300 text-blue-800 font-semibold"
-            >Low class</span
-          >
-        </div>
+<div class="overflow-x-auto rounded-xl shadow-sm bg-white">
+  <table class="w-full table-fixed text-sm text-gray-600">
+    <thead class="bg-gray-50 text-xs uppercase text-gray-400 border-b border-gray-200">
+      <tr>
+        <th class="px-4 py-3 w-[5%] text-center">#</th>
+        <th class="px-4 py-3 w-[30%] text-center">Task Title</th>
+        <th class="px-4 py-3 w-[15%] text-center">Priority</th>
+        <th class="px-4 py-3 w-[30%] text-center">Team</th>
+        <th class="px-4 py-3 w-[20%] text-center">Created</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      {% for task in tasks %}
+      <tr class="hover:bg-gray-50">
+        <td class="px-4 py-4 text-center font-medium">{{ forloop.counter }}</td>
 
-        <div>
-          <span
-            class="px-3 py-1 rounded-xl bg-gray-200 text-gray-700 font-semibold"
-            >Medium</span
-          >
-        </div>
-        <div>
-          <span
-            class="px-3 py-1 rounded-xl bg-red-200 text-red-700 font-semibold"
-            >High</span
-          >
-        </div>
-      </div>
-      <!--Team-->
-      <div class="space-y-4">
-        <div class="text-sm font-semibold text-gray-500 pb-2">TEAM</div>
-        <div class="flex -space-x-1">
-          <div
-            class="w-7 h-7 bg-blue-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>CA</span>
-          </div>
-          <div
-            class="w-7 h-7 bg-green-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>JS</span>
-          </div>
-          <div
-            class="w-7 h-7 bg-yellow-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>B</span>
-          </div>
-        </div>
+        <td class="px-4 py-4 flex items-center gap-2 text-left">
+          <div class="w-2 h-2 rounded-full bg-green-500"></div>
+          <span>{{ task.title }}</span>
+          <a href='{% url "update_task" task.id %}' class="px-2 py-1 bg-green-500">Edit</a>
+          <form action='{% url "delete_task" task.id %}' method='POST'>
+            {% csrf_token %}
+            <button type='submit' class="px-2 py-1 bg-red-500">Delete</button>
+          </form>
+        </td>
 
-        <div class="flex -space-x-2">
-          <div
-            class="w-7 h-7 bg-red-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>AJ</span>
-          </div>
-          <div
-            class="w-7 h-7 bg-purple-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>JS</span>
-          </div>
-          <div
-            class="w-7 h-7 bg-yellow-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>B</span>
-          </div>
-        </div>
+        <td class="px-4 py-4 text-center">
+          <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs">
+            {{ task.details.get_priority_display }}
+          </span>
+        </td>
 
-        <div class="flex -space-x-2">
-          <div
-            class="w-7 h-7 bg-blue-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>CA</span>
+        <td class="px-4 py-4 text-center">
+          <div class="flex justify-center -space-x-2">
+            {% for emp in task.assigned_to.all %}
+            <div
+              class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs border-2 border-white"
+              title="{{ emp.name }}">
+              {{ emp.name|slice:':1' }}
+            </div>
+            {% endfor %}
           </div>
-          <div
-            class="w-7 h-7 bg-green-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>JS</span>
-          </div>
-          <div
-            class="w-7 h-7 bg-red-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>AJ</span>
-          </div>
-          <div
-            class="w-7 h-7 bg-yellow-500 justify-center rounded-full flex items-center text-white"
-          >
-            <span>B</span>
-          </div>
-        </div>
-      </div>
+        </td>
 
-      <!--Created At-->
-      <div class="space-y-5">
-        <div class="text-sm font-semibold text-gray-500 pb-2">CREATED AT</div>
-        <div><span>9 months ago</span></div>
-        <div><span>9 months ago</span></div>
-        <div><span>10 months ago</span></div>
-      </div>
-    </div>
-  </div>
+        <td class="px-4 py-4 text-center">{{ task.created_at|timesince }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
+
+
+
 
 {% endblock tasks %}
