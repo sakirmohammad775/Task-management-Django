@@ -1,5 +1,7 @@
 from django.db import models
-
+from django.db.models.signals import post_save,pre_save
+    
+from django.dispatch import receiver
 
 class Employee(models.Model):
     name = models.CharField(max_length=100)
@@ -70,3 +72,12 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+# signals m-11 send signal to the receiver in terminal  
+@receiver(pre_save,sender=Task)
+def notify_task_creation(sender,instance,**kwargs):
+    
+    print('sender',sender)
+    print('instance',instance)
+    print(kwargs)
+    instance.is_completed=True # updated the instance 
