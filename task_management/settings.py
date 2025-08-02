@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-6(j!4a#(n)!s)gtgjnq^e-5gjeb*k2^cem&vibfd8q^3o(^^=e"
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -86,15 +86,15 @@ WSGI_APPLICATION = "task_management.wsgi.application"
 #     }
 # }
 
-# PostgreSQL
+# PostgreSQL   I change this after module 11.4
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "task_management",
-        "USER": "postgres",
-        "PASSWORD": "password",
-        "HOST": "localhost",
-        "PORT": "5432",
+        "NAME": config('DB_NAME',default=''),
+        "USER": config("DB_USER",default=''),
+        "PASSWORD": config("DB_PASSWORD",default=''),
+        "HOST": config("DB_HOST",default=''),
+        "PORT": config("DB_PORT",default=''),
     }
 }
 
@@ -150,9 +150,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 ## email and password set to send an email to the user when they sign up
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = "aislash05@gmail.com"#sender's email-id
-EMAIL_HOST_PASSWORD = "clxj wxzs uqat cbno"#password associated with above email-id (not the regular password)
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS')
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')#sender's email-id
+EMAIL_HOST_PASSWORD =config('EMAIL_HOST_PASSWORD') #password associated with above email-id (not the regular password)
 
