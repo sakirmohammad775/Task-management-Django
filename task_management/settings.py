@@ -156,3 +156,5 @@ EMAIL_PORT = config('EMAIL_PORT')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')#sender's email-id
 EMAIL_HOST_PASSWORD =config('EMAIL_HOST_PASSWORD') #password associated with above email-id (not the regular password)
 
+
+FRONTED_URL='http://127.0.0.1:8000'
