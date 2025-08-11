@@ -26,7 +26,7 @@ def sign_up(request):
         if form.is_valid():
             user = form.save(commit=False)
             print("user", user)
-            user.set_password(form.cleaned_data.get("password"))
+            user.set_password(form.cleaned_data.get("password1"))
             print(form.cleaned_data)
             user.is_active = False
             user.save()
