@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/output.css'}">
 </head>
 
 <body>
@@ -19,9 +21,8 @@
 
         <form method="POST">
             {% csrf_token %}
-            <input type="text" placeholder="Enter your username" name="username">
-            <input type="text" placeholder="Enter your Password" name="password">
-            <button type="submit">Sign In</button>
+            {{form}}
+            <button class="bg-blue-500 px-2 py-1 " type="submit">Sign In</button>
         </form>
     </div>
 </body>

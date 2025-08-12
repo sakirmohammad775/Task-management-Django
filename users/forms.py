@@ -1,9 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 import re
 from tasks.forms import StyledFormMixin 
-
+from django.contrib.auth.forms import AuthenticationForm
 
 class RegisterForm(UserCreationForm):
     class Meta:
@@ -25,7 +25,7 @@ class RegisterForm(UserCreationForm):
 
 
 class CustomRegistrationForm(StyledFormMixin,forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput)
+    password1 = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
@@ -34,9 +34,9 @@ class CustomRegistrationForm(StyledFormMixin,forms.ModelForm):
             "username",
             "first_name",
             "last_name",
-            "password",
-            "confirm_password",
             "email",
+            "password1",
+            "confirm_password",
         ]
 
     def clean_email(self):
@@ -44,9 +44,10 @@ class CustomRegistrationForm(StyledFormMixin,forms.ModelForm):
         email_exists=User.objects.filter(email=email).exists()
         if email_exists:
             raise forms.ValidationError('Email already exists')
-
+        return email
+    
     def clean_password1(self): # field error
-        password1 = self.cleaned_data.get("password")  # ✅ Correct
+        password1 = self.cleaned_data.get("password1")  # ✅ Correct
 
         errors=[]
         if len(password1) < 8:
@@ -68,10 +69,20 @@ class CustomRegistrationForm(StyledFormMixin,forms.ModelForm):
 
     def clean(self):   ## not field error
         cleaned_data = super().clean()
-        password1 = cleaned_data.get("password")
+        password1 = cleaned_data.get("password1")
         confirm_password = cleaned_data.get("confirm_password")
         
         if password1 != confirm_password:
             raise forms.ValidationError("Passwords do not match")
         
         return cleaned_data
+
+class LoginForm(StyledFormMixin,AuthenticationForm):
+    def __init__(self, *arg, **kwargs):
+        super().__init__(*arg,**kwargs)
+        
+class AssignRoleForm(forms.Form):
+    role=forms.ModelChoiceField(
+        queryset=Group.objects.all(),
+        empty_label="Select a Role"
+    )

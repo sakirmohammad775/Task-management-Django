@@ -123,3 +123,4 @@ def view_task(request):
     """prefetch_related reverse foreignkey,manytomany"""
     tasks = Task.objects.prefetch_related("assigned_to").all()
     return render(request, "show_task.html", {"tasks": tasks})
+
