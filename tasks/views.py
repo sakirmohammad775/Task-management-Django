@@ -5,8 +5,16 @@ from tasks.models import *
 from datetime import date
 from django.db.models import Q, Count
 from django.contrib import messages
-
+from django.contrib.auth.decorators import login_required,user_passes_test,permission_required
 # Create your views here.
+
+def is_manager(user):
+    return user.groups.filter(name='Manager').exists()
+
+def is_employee(user):
+    return user.groups.filter(name='Employee').exists()
+
+@user_passes_test(is_manager,login_url='no-permission')
 def manager_dashboard(request):
     type = request.GET.get("type")
 
@@ -46,20 +54,13 @@ def manager_dashboard(request):
 
     return render(request, "dashboard/manager_dashboard.html", context)
 
-
-def user_dashboard(request):
+@user_passes_test(is_employee)
+def employee_dashboard(request):
     return render(request, "dashboard/user_dashboard.html")
 
 
-def test(request):
-    context = {
-        "names": ["John", "ahmed", "john"],
-        "age": [25, 30, 35],
-        "city": ["cairo", "alex", "giza"],
-    }
-    return render(request, "test.html", context)
-
-
+@login_required
+@permission_required("tasks.add_task",login_url='no-permission')
 def create_task(request):
     # employees=Employee.objects.all() # get all employees from database
     task_form = TaskModelForm()  # For Get
@@ -82,7 +83,8 @@ def create_task(request):
     context = {"task_form": task_form,"task_detail_form":task_detail_form}  # For Get
     return render(request, "task_form.html", context)  # return the form to the user
 
-
+@login_required
+@permission_required("tasks.change_task",login_url='no-permission')
 def update_task(request, id):
     task = Task.objects.get(id=id)
     task_form = TaskModelForm(instance=task)  # For GET
@@ -108,6 +110,9 @@ def update_task(request, id):
 
     context = {"task_form": task_form, "task_detail_form": task_detail_form}
     return render(request, "task_form.html", context)
+
+@login_required
+@permission_required("tasks.delete_task",login_url='no-permission')
 def delete_task(request, id):
     if request.method == 'POST':
         task = Task.objects.get(id=id)
@@ -117,7 +122,9 @@ def delete_task(request, id):
     else:
         messages.error(request, 'Something went wrong')
         return redirect('manager_dashboard')
-    
+
+@login_required
+@permission_required("tasks.view_task",login_url='no-permission')
 def view_task(request):
     # retrive all tasks from database
     """prefetch_related reverse foreignkey,manytomany"""
