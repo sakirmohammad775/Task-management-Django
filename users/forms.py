@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User,Group
+from django.contrib.auth.models import User,Group,Permission
 import re
 from tasks.forms import StyledFormMixin 
 from django.contrib.auth.forms import AuthenticationForm
@@ -86,3 +86,15 @@ class AssignRoleForm(forms.Form):
         queryset=Group.objects.all(),
         empty_label="Select a Role"
     )
+
+class CreateGroupForm(StyledFormMixin,forms.ModelForm):
+    permissions=forms.ModelMultipleChoiceField(
+        queryset=Permission.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label='Assign Permission'
+    )
+    class Meta:
+        model = Group
+        fields = ('name', 'permissions')
+        
