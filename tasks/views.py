@@ -131,3 +131,9 @@ def view_task(request):
     tasks = Task.objects.prefetch_related("assigned_to").all()
     return render(request, "show_task.html", {"tasks": tasks})
 
+
+@login_required
+@permission_required("tasks.view_task",login_url='no-permission')
+def task_details(request,task_id):
+    task=Task.objects.get(id=task_id)
+    return render(request,"task_details.html",{"task":task})
