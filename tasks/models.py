@@ -1,14 +1,13 @@
 from django.db import models
 from django.db.models.signals import post_save,pre_save,m2m_changed,post_delete
-from django.core.mail import send_mail
-from django.dispatch import receiver
+from django.contrib.auth.models import User
 
-class Employee(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
+# class Employee(models.Model):
+#     name = models.CharField(max_length=100)
+#     email = models.EmailField(unique=True)
 
-    def __str__(self):  # pragma: no cover
-        return self.name
+#     def __str__(self):  # pragma: no cover
+#         return self.name
 
 
 # Create your models here.
@@ -22,16 +21,17 @@ class Task(models.Model):
         "Project", on_delete=models.CASCADE, default=1
     )  # One to many relationship (child=task... parent=project)
 
-    assigned_to = models.ManyToManyField(
-        Employee, related_name="tasks"
-    )  # many to many field (one employee can have many tasks) and one task can be assigned to many employees
+    # assigned_to = models.ManyToManyField(
+    #     Employee, related_name="tasks"
+    # )  
+    # many to many field (one employee can have many tasks) and one task can be assigned to many employees
 
     # new_string=models.CharField(max_length=250)
+    assigned_to=models.ManyToManyField(User,related_name='tasks')
     title = models.CharField(max_length=250)
     description = models.TextField()
     due_date = models.DateField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="PENDING")
-    is_completed = models.BooleanField(default=False)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="PENDING") 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -60,7 +60,7 @@ class TaskDetail(models.Model):
         Task,
         on_delete=models.DO_NOTHING, 
         related_name="details")
-    
+    asset=models.ImageField(upload_to='tasks_asset',blank=True,null=True,default="tasks_asset/default_img.jpg")
     # one to one relationship
     # assigned_to = models.CharField(max_length=100)
     priority = models.CharField(max_length=1, choices=PRIORITY_OPTIONS, default=LOW)

@@ -2,15 +2,13 @@ from django import forms
 from tasks.models import Task,TaskDetail
 
 # Django Form
-
-
 class TaskForm(forms.Form):
     title = forms.CharField(max_length=250, label="Task Title")
     description = forms.CharField(
         widget=forms.Textarea, label='Task Description')
     due_date = forms.DateField(widget=forms.SelectDateWidget, label="Due Date")
-    assigned_to = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple, choices=[], label='Assigned To')
+    # assigned_to = forms.MultipleChoiceField(
+    #     widget=forms.CheckboxSelectMultiple, choices=[], label='Assigned To')
 
     def __init__(self, *args, **kwargs):
         # print(args, kwargs)
@@ -18,7 +16,6 @@ class TaskForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['assigned_to'].choices = [
             (emp.id, emp.name) for emp in employees]
-
 
 class StyledFormMixin:
     """ Mixing to apply style to form field"""
@@ -57,25 +54,22 @@ class StyledFormMixin:
                     'class': self.default_classes
                 })
 
-
 # Django Model Form
-
 
 class TaskModelForm(StyledFormMixin, forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['title', 'description', 'due_date', 'assigned_to']
+        fields = ['title', 'description', 'due_date', 'assigned_to']  #add assigned_to
         widgets = {
             'due_date': forms.SelectDateWidget,
             'assigned_to': forms.CheckboxSelectMultiple
         }
-
+        
     """ Widget using mixins """
         
-
 class TaskDetailModelForm(StyledFormMixin, forms.ModelForm):
     class Meta:
         model = TaskDetail
-        fields = ['priority','notes']
+        fields = ['priority','notes','asset']
     
      
