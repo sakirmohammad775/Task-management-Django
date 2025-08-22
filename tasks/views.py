@@ -11,9 +11,20 @@ from django.contrib.auth.decorators import (
     permission_required,
 )
 from users.views import is_admin
+from django.views import View
+from django.utils.decorators import method_decorator
+
+
 
 # Create your views here.
+#### class based views
+class Greetings(View):
+    greetings='hello everyone'
+    def get(self,request):
+        return HttpResponse (self.greetings)
 
+class HiGreetings(Greetings):
+    greetings='vala acenni'
 
 def is_manager(user):
     return user.groups.filter(name="Manager").exists()
@@ -95,6 +106,38 @@ def create_task(request):
     context = {"task_form": task_form, "task_detail_form": task_detail_form}  # For Get
     return render(request, "task_form.html", context)  # return the form to the user
 
+
+#variable for list of decorators
+create_decorators=[login_required,permission_required(
+    "tasks.add_task",login_url='no-permission')] ## used of all other 
+"""class based view """
+@method_decorator(create_decorators, name="dispatch")
+class CreateTask(View):
+    """ for creating task"""
+    template_name ='task_form.html' ##
+    
+    def get(self,request,*args, **kwargs):
+        task_form = TaskModelForm()  # For Get
+        task_detail_form = TaskDetailModelForm()
+        
+        context = {"task_form": task_form, "task_detail_form": task_detail_form}  # For Get
+        return render(request, self.template_name, context)  # return the form to the user
+    
+    def post(self,request,*args, **kwargs):
+        task_form = TaskModelForm(request.POST)
+        task_detail_form = TaskDetailModelForm(request.POST, request.FILES)
+
+        if task_form.is_valid() and task_detail_form.is_valid():
+            """For Model form data"""
+            task = task_form.save()
+            task_detail = task_detail_form.save(commit=False)
+            task_detail.task = task
+            task_detail.save()
+
+            messages.success(request, "task created successfully")
+            return redirect("create_task")
+        
+        
 
 @login_required
 @permission_required("tasks.change_task", login_url="no-permission")
