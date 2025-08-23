@@ -166,6 +166,28 @@ def update_task(request, id):
     context = {"task_form": task_form, "task_detail_form": task_detail_form}
     return render(request, "task_form.html", context)
 
+class UpdateTask(View):
+    def get(self,request,*args, **kwargs):
+        task = Task.objects.get(id=id)
+        task_form = TaskModelForm(instance=task)  # For GET
+        context = {"task_form": task_form, "task_detail_form": task_detail_form}
+        return render(request, "task_form.html", context)
+    def post(self,request,*args, **kwargs):
+        task_form = TaskModelForm(request.POST, instance=task)
+        task_detail_form = TaskDetailModelForm(request.POST, instance=task.details)
+
+        if task_form.is_valid() and task_detail_form.is_valid():
+
+            """For Model Form Data"""
+            task = task_form.save()
+            task_detail = task_detail_form.save(commit=False)
+            task_detail.task = task
+            task_detail.save()
+
+            messages.success(request, "Task Updated Successfully")
+            return redirect("update_task", id)
+         
+
 
 @login_required
 @permission_required("tasks.delete_task", login_url="no-permission")
