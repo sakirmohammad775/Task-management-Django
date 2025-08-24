@@ -16,7 +16,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.base import ContextMixin
-from django.views.generic import ListView,DetailView
+from django.views.generic import ListView,DetailView,UpdateView
 
 # Create your views here.
 #### class based views
@@ -191,27 +191,11 @@ def update_task(request, id):
     return render(request, "task_form.html", context)
 
 
-class UpdateTask(View):
-    def get(self, request, *args, **kwargs):
-        task = Task.objects.get(id=id)
-        task_form = TaskModelForm(instance=task)  # For GET
-        context = {"task_form": task_form, "task_detail_form": task_detail_form}
-        return render(request, "task_form.html", context)
-
-    def post(self, request, *args, **kwargs):
-        task_form = TaskModelForm(request.POST, instance=task)
-        task_detail_form = TaskDetailModelForm(request.POST, instance=task.details)
-
-        if task_form.is_valid() and task_detail_form.is_valid():
-
-            """For Model Form Data"""
-            task = task_form.save()
-            task_detail = task_detail_form.save(commit=False)
-            task_detail.task = task
-            task_detail.save()
-
-            messages.success(request, "Task Updated Successfully")
-            return redirect("update_task", id)
+class UpdateTask(UpdateView):
+   model=Task
+   form_class='task_form.html'
+   context_object_name='task'
+   pk_url_kwarg='id'
 
 
 @login_required
