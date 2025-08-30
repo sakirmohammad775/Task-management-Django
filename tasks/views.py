@@ -231,6 +231,7 @@ class UpdateTask(UpdateView):
        
 
 
+
 @login_required
 @permission_required("tasks.delete_task", login_url="no-permission")
 def delete_task(request, id):
