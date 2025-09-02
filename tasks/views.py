@@ -228,8 +228,6 @@ class UpdateTask(UpdateView):
             messages.success(request, "Task Updated Successfully")
             return redirect('update-task', self.object.id)
         return redirect('update-task', self.object.id)
-       
-
 
 @login_required
 @permission_required("tasks.delete_task", login_url="no-permission")
