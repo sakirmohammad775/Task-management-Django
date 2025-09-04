@@ -224,6 +224,7 @@ class UpdateTask(UpdateView):
             task_detail = task_detail_form.save(commit=False)
             task_detail.task = task
             task_detail.save()
+            
 
             messages.success(request, "Task Updated Successfully")
             return redirect('update-task', self.object.id)
